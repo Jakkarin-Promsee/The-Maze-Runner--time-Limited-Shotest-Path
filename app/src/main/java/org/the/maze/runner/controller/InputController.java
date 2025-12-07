@@ -17,58 +17,60 @@ import org.the.maze.runner.ui.GridView;
 
 public class InputController {
 
-    @FXML
-    private Pane gridPane;
-
+    // Maze data input text area
     @FXML
     private TextArea mazeInputArea;
 
-    @FXML
-    private TextArea mazeOutputArea;
-
+    // Maze Generate input text area
     @FXML
     private TextArea mazeInputSeed;
-
     @FXML
     private TextArea mazeGenerateWidth;
-
     @FXML
     private TextArea mazeGenerateHeight;
 
+    // Maze Visualize, Using javafx Pane to store 2D tiles
+    @FXML
+    private Pane gridPane;
+
+    // The class to build javafx pane
     private GridView gridView;
 
     // Define tile size for visualization
     private static final int maxWidth = 300;
     private static final int maxHeight = 300;
 
+    // Intialize when load scene
     @FXML
     public void initialize() {
+        // Intialize grid view class size
         this.gridView = new GridView(maxWidth, maxHeight);
 
-        // Listen for text changes in the TextArea
+        // Listen for text changes in the input TextArea
         mazeInputArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Build and Update gride Pane
             Pane initialVisualization = gridView.draw(newValue);
-
             updateVisualizationPane(initialVisualization);
-
         });
     }
 
+    // Set screen size
+    private void updateVisualizationPaneScreen(int weidth, int height) {
+        gridView.setScreen(weidth, height);
+    }
+
+    // Update Pane with new Pane
     private void updateVisualizationPane(Pane newPane) {
         if (gridPane == null) {
             System.err.println("Error: FXML gridPane container is null.");
             return;
         }
+
         // 1. Clear all existing children from the container
         gridPane.getChildren().clear();
 
         // 2. Add the new Pane containing the visualization
         gridPane.getChildren().add(newPane);
-
-        // Optional: Ensure the new Pane is stretched to fill the container if gridPane
-        // is a layout like StackPane/BorderPane
-        // newPane.maxWidth(gridPane.getWidth());
-        // newPane.maxHeight(gridPane.getHeight());
     }
 
     // Called when user clicks "Choose Maze File"
@@ -79,20 +81,20 @@ public class InputController {
         chooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
-        Stage stage = App.getPrimaryStage(); // convenience method (see below)
+        Stage stage = App.getPrimaryStage();
         File file = chooser.showOpenDialog(stage);
 
         if (file != null) {
             try {
                 String content = Files.readString(file.toPath());
-                mazeInputArea.setText(content);
+                loadInputText(content);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    // Example buttons
+    // Load Example buttons function
     @FXML
     private void onExample1() {
         loadFileFromPath("m15_15.txt");
@@ -123,15 +125,17 @@ public class InputController {
         loadFileFromPath("m100_100.txt");
     }
 
+    // Load maze from File Class
     private void loadMazeFromFile(File file) {
         try {
             String content = Files.readString(file.toPath());
-            mazeInputArea.setText(content);
+            loadInputText(content);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // Lad maze from String Class
     private void loadFileFromPath(String name) {
         try {
             URL url = getClass().getResource("/org/the/maze/runner/maze_example/" + name);
@@ -142,28 +146,31 @@ public class InputController {
             }
 
             String content = Files.readString(Path.of(url.toURI()));
-            mazeInputArea.setText(content);
+            loadInputText(content);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void loadExample(String content) {
+    // Load new text to input areas
+    private void loadInputText(String content) {
         mazeInputArea.setText(content);
     }
 
+    // Load maze by generate
     @FXML
     private void onGenerateMaze() {
-        loadExample("generate");
+        loadInputText("generate");
     }
 
+    // Go back button to main page
     @FXML
     private void onBack() {
         App.setRoot("main-view");
     }
 
-    // CONTINUE → NEXT PAGE
+    // Go continue to solve page
     @FXML
     private void onContinue() {
         String mazeText = mazeInputArea.getText().trim();
@@ -177,6 +184,6 @@ public class InputController {
         App.setMaze(mazeText);
 
         // Load next page
-        App.setRoot("grid-view");
+        App.setRoot("maze-solve");
     }
 }

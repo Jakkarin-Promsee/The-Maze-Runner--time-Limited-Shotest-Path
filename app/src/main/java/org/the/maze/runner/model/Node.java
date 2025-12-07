@@ -8,6 +8,7 @@ public class Node {
 
     // --- Maze/Grid State Properties ---
     private int weight = 1; // Cost to traverse this node (default is 1)
+    private boolean isVoid = false;
     private boolean isWall = false; // True if it's a blocked cell (#)
     private boolean isStart = false; // True if it's the starting point (S)
     private boolean isEnd = false; // True if it's the destination (G)
@@ -49,6 +50,14 @@ public class Node {
 
     public void setWall(boolean isWall) {
         this.isWall = isWall;
+    }
+
+    public boolean isVoid() {
+        return isVoid;
+    }
+
+    public void setVoid(boolean isVoid) {
+        this.isVoid = isVoid;
     }
 
     public boolean isStart() {
