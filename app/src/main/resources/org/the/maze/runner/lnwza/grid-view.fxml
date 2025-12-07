@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.the.maze.runner.lnwza.controller.GridController">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="BFS" onAction="#runBFS"/>
+            <Button text="Dijkstra" onAction="#runDijkstra"/>
+            <Button text="A*" onAction="#runAStar"/>
+            <Button text="Back" onAction="#goBack"/>
+        </HBox>
+    </top>
+
+    <center>
+        <Pane fx:id="gridPane" prefWidth="600" prefHeight="600"
+              style="-fx-background-color: lightgray;"/>
+    </center>
+
+</BorderPane>

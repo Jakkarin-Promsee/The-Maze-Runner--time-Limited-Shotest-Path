@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.the.maze.runner.lnwza.controller.InputController"
+      spacing="25"
+      alignment="TOP_CENTER"
+      prefWidth="1100" prefHeight="820"
+      style="-fx-background-color: #121212;">
+
+    <!-- TITLE -->
+    <Label text="THE MAZE INITIALIZE"
+           style="
+               -fx-text-fill: #58a6ff;
+               -fx-font-size: 52px;
+               -fx-font-weight: bold;
+               -fx-letter-spacing: 4px;
+               -fx-effect: dropshadow(gaussian, #1a4a7a, 20, 0.45, 0, 0);
+               -fx-padding: 40 0 10 0;
+           "/>
+
+    <!-- MAIN CONTENT -->
+    <HBox spacing="40" alignment="TOP_CENTER" maxWidth="1000">
+
+        <!-- LEFT: MANUAL INPUT -->
+        <VBox spacing="15" prefWidth="320" alignment="CENTER">
+            <Label text="Enter Maze Manually"
+                   style="-fx-font-size: 20px; -fx-text-fill: #CCCCCC; -fx-font-weight: bold;"/>
+
+            <TextArea fx:id="mazeInputArea"
+                      prefHeight="280"
+                      wrapText="false"
+                      style="
+                          -fx-background-color: #1e1e1e;
+                          -fx-control-inner-background: #1e1e1e;
+                          -fx-text-fill: #EDEDED;
+                          -fx-font-size: 14px;
+                          -fx-highlight-fill: #3366ff;
+                          -fx-border-color: #333333;
+                          -fx-border-radius: 8;
+                          -fx-background-radius: 8;
+                          -fx-padding: 12;
+                      "/>
+
+            <Button text="📂 Load From File"
+                    onAction="#onChooseFile"
+                    prefWidth="200" prefHeight="40"
+                    style="
+                        -fx-background-color: #3366ff;
+                        -fx-text-fill: white;
+                        -fx-background-radius: 10;
+                        -fx-font-size: 16px;
+                        -fx-cursor: hand;
+                        -fx-effect: dropshadow(gaussian, #1d3fa0, 12, 0.2, 0, 0);
+                    "/>
+        </VBox>
+
+        <!-- MIDDLE: MAZE GENERATOR -->
+        <VBox spacing="20" alignment="TOP_CENTER" prefWidth="330">
+
+            <Label text="Generate New Maze"
+                   style="-fx-font-size: 20px; -fx-text-fill: #CCCCCC; -fx-font-weight: bold;"/>
+
+            <Button text="✨ Generate Maze"
+                    onAction="#onGenerateMaze"
+                    prefWidth="300" prefHeight="45"
+                    style="
+                        -fx-background-color: linear-gradient(#00b06a, #009e5f);
+                        -fx-text-fill: white;
+                        -fx-background-radius: 10;
+                        -fx-font-size: 17px;
+                        -fx-cursor: hand;
+                        -fx-effect: dropshadow(gaussian, #007a48, 15, 0.25, 0, 0);
+                    "/>
+
+            <!-- Size Inputs -->
+            <HBox spacing="20" alignment="CENTER">
+                <VBox spacing="5">
+                    <Label text="Seed"
+                           style="-fx-text-fill: #BBBBBB; -fx-font-size: 14px;"/>
+                    <TextArea fx:id="mazeGenerateSeed"
+                               promptText="e.g. 15"
+                               prefRowCount="1"
+                               prefWidth="90"
+                               style="
+                                   -fx-background-color: #1e1e1e;
+                                   -fx-control-inner-background: #1e1e1e;
+                                   -fx-text-fill: #EDEDED;
+                                   -fx-border-radius: 6;
+                                   -fx-background-radius: 6;
+                                   -fx-border-color: #333;
+                                   -fx-padding: 6;
+                               "/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Width"
+                           style="-fx-text-fill: #BBBBBB; -fx-font-size: 14px;"/>
+                    <TextArea fx:id="mazeGenerateWidth"
+                               promptText="e.g. 15"
+                               prefRowCount="1"
+                               prefWidth="90"
+                               style="
+                                   -fx-background-color: #1e1e1e;
+                                   -fx-control-inner-background: #1e1e1e;
+                                   -fx-text-fill: #EDEDED;
+                                   -fx-border-radius: 6;
+                                   -fx-background-radius: 6;
+                                   -fx-border-color: #333;
+                                   -fx-padding: 6;
+                               "/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Height"
+                           style="-fx-text-fill: #BBBBBB; -fx-font-size: 14px;"/>
+                    <TextArea fx:id="mazeGenerateHeight"
+                               promptText="e.g. 10"
+                               prefRowCount="1"
+                               prefWidth="90"
+                               style="
+                                   -fx-background-color: #1e1e1e;
+                                   -fx-control-inner-background: #1e1e1e;
+                                   -fx-text-fill: #EDEDED;
+                                   -fx-border-radius: 6;
+                                   -fx-background-radius: 6;
+                                   -fx-border-color: #333;
+                                   -fx-padding: 6;
+                               "/>
+                </VBox>
+            </HBox>
+
+            <Label text="Quick Examples"
+                   style="-fx-font-size: 16px; -fx-text-fill: #CCCCCC;"/>
+
+            <GridPane hgap="10" vgap="10" alignment="CENTER">
+                <!-- 6 Example Buttons -->
+                <Button text="Example 1" onAction="#onExample1" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                        style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
+                <Button text="Example 2" onAction="#onExample2" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                        style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
+                <Button text="Example 3" onAction="#onExample3" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                        style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
+                <Button text="Example 4" onAction="#onExample4" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                        style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
+                <Button text="Example 5" onAction="#onExample5" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                        style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
+                <Button text="Example 6" onAction="#onExample6" GridPane.columnIndex="2" GridPane.rowIndex="1"
+                        style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
+            </GridPane>
+        </VBox>
+
+        <!-- RIGHT: OUTPUT + EXAMPLES -->
+        <VBox spacing="20" prefWidth="350">
+
+            <Label text="Maze Visualization"
+                   style="-fx-font-size: 20px; -fx-text-fill: #CCCCCC; -fx-font-weight: bold;"/>
+
+            <TextArea fx:id="mazeOutputArea"
+                      prefHeight="280"
+                      editable="false"
+                      wrapText="false"
+                      style="
+                          -fx-background-color: #1e1e1e;
+                          -fx-control-inner-background: #1e1e1e;
+                          -fx-text-fill: #EDEDED;
+                          -fx-font-size: 14px;
+                          -fx-border-color: #333333;
+                          -fx-border-radius: 8;
+                          -fx-background-radius: 8;
+                          -fx-padding: 12;
+                      "/>
+        </VBox>
+    </HBox>
+
+    <!-- FOOTER -->
+    <HBox alignment="CENTER" spacing="600" style="-fx-padding:30 0 10 0;">
+        <Button text="Back"
+                onAction="#onBack"
+                prefWidth="120" prefHeight="40"
+                style="
+                    -fx-background-color: #444;
+                    -fx-text-fill: #EEE;
+                    -fx-font-size: 16px;
+                    -fx-background-radius: 8;
+                    -fx-cursor: hand;
+                "/>
+
+        <Button text="Solve Maze"
+                onAction="#onContinue"
+                prefWidth="140" prefHeight="40"
+                style="
+                    -fx-background-color: #ffaa00;
+                    -fx-text-fill: #121212;
+                    -fx-font-weight: bold;
+                    -fx-font-size: 17px;
+                    -fx-background-radius: 8;
+                    -fx-cursor: hand;
+                "/>
+    </HBox>
+
+</VBox>
