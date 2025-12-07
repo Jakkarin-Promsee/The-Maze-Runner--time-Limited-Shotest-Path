@@ -5,7 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.the.maze.runner.lnwza.controller.InputController"
+      fx:controller="org.the.maze.runner.controller.InputController"
       spacing="25"
       alignment="TOP_CENTER"
       prefWidth="1100" prefHeight="820"
@@ -82,7 +82,7 @@
                     <Label text="Seed"
                            style="-fx-text-fill: #BBBBBB; -fx-font-size: 14px;"/>
                     <TextArea fx:id="mazeGenerateSeed"
-                               promptText="e.g. 15"
+                               text="66"
                                prefRowCount="1"
                                prefWidth="90"
                                style="
@@ -100,7 +100,7 @@
                     <Label text="Width"
                            style="-fx-text-fill: #BBBBBB; -fx-font-size: 14px;"/>
                     <TextArea fx:id="mazeGenerateWidth"
-                               promptText="e.g. 15"
+                               text="50"
                                prefRowCount="1"
                                prefWidth="90"
                                style="
@@ -118,7 +118,7 @@
                     <Label text="Height"
                            style="-fx-text-fill: #BBBBBB; -fx-font-size: 14px;"/>
                     <TextArea fx:id="mazeGenerateHeight"
-                               promptText="e.g. 10"
+                               text="50"
                                prefRowCount="1"
                                prefWidth="90"
                                style="
@@ -138,17 +138,24 @@
 
             <GridPane hgap="10" vgap="10" alignment="CENTER">
                 <!-- 6 Example Buttons -->
-                <Button text="Example 1" onAction="#onExample1" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                <Button text="15x15" onAction="#onExample1" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                        prefWidth="90"
+                        style="-fx-background-color:#393939; 
+                        -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
+                <Button text="40x40" onAction="#onExample2" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                        prefWidth="90"
                         style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
-                <Button text="Example 2" onAction="#onExample2" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                <Button text="50x50" onAction="#onExample3" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                        prefWidth="90"
                         style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
-                <Button text="Example 3" onAction="#onExample3" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                <Button text="60x60" onAction="#onExample4" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                        prefWidth="90"
                         style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
-                <Button text="Example 4" onAction="#onExample4" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                <Button text="70x60" onAction="#onExample5" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                        prefWidth="90"
                         style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
-                <Button text="Example 5" onAction="#onExample5" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                        style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
-                <Button text="Example 6" onAction="#onExample6" GridPane.columnIndex="2" GridPane.rowIndex="1"
+                <Button text="100x100" onAction="#onExample6" GridPane.columnIndex="2" GridPane.rowIndex="1"
+                        prefWidth="90"
                         style="-fx-background-color:#393939; -fx-text-fill:#DEDEDE; -fx-background-radius:6; -fx-padding:10; -fx-cursor: hand;"/>
             </GridPane>
         </VBox>

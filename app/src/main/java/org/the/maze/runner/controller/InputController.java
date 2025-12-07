@@ -6,7 +6,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.the.maze.runner.App;
 
@@ -51,32 +54,58 @@ public class InputController {
     // Example buttons
     @FXML
     private void onExample1() {
-        loadExample("S..#\n.#..\n..#E");
+        loadFileFromPath("m15_15.txt");
     }
 
     @FXML
     private void onExample2() {
-        loadExample("S....\n###..\n...#E");
+        loadFileFromPath("m40_40.txt");
     }
 
     @FXML
     private void onExample3() {
-        loadExample("S#..\n..#.\n.#.E");
+        loadFileFromPath("m50_50.txt");
     }
 
     @FXML
     private void onExample4() {
-        loadExample("S...\n####\n...E");
+        loadFileFromPath("m60_60.txt");
     }
 
     @FXML
     private void onExample5() {
-        loadExample("S.#.\n#..#\n..#E");
+        loadFileFromPath("m70_60.txt");
     }
 
     @FXML
     private void onExample6() {
-        loadExample("S.#.\n#..#\n..#E");
+        loadFileFromPath("m100_100.txt");
+    }
+
+    private void loadMazeFromFile(File file) {
+        try {
+            String content = Files.readString(file.toPath());
+            mazeInputArea.setText(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadFileFromPath(String name) {
+        try {
+            URL url = getClass().getResource("/org/the/maze/runner/maze_example/" + name);
+
+            if (url == null) {
+                System.out.println("File not found: " + url);
+                return;
+            }
+
+            String content = Files.readString(Path.of(url.toURI()));
+            mazeInputArea.setText(content);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadExample(String content) {

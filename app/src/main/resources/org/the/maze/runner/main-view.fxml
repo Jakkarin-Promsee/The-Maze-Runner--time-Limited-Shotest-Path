@@ -8,7 +8,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.the.maze.runner.lnwza.controller.MainController"
+      fx:controller="org.the.maze.runner.controller.MainController"
       alignment="CENTER"
       spacing="40" style="-fx-background-color: #0d1117; 
              -fx-padding: 50;" prefWidth="700" prefHeight="500"> <children>

@@ -5,7 +5,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.the.maze.runner.lnwza.controller.GridController">
+            fx:controller="org.the.maze.runner.controller.GridController">
 
     <top>
         <HBox spacing="10" alignment="CENTER">
