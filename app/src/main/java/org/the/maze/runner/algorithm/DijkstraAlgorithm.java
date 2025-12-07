@@ -1,9 +1,9 @@
-package org.the.maze.runner.lnwza.algorithm;
+package org.the.maze.runner.algorithm;
 
-import org.the.maze.runner.lnwza.model.*;
+import org.the.maze.runner.model.*;
 import java.util.*;
 
-public class GaSimple implements PathFindingAlgorithm {
+public class DijkstraAlgorithm implements PathFindingAlgorithm {
 
     @Override
     public List<Node> findPath(Grid grid, Node start, Node end) {

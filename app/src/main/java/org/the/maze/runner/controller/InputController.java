@@ -1,13 +1,14 @@
-package org.the.maze.runner.lnwza.controller;
+package org.the.maze.runner.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.the.maze.runner.lnwza.App;
 
 import java.io.File;
 import java.nio.file.Files;
+
+import org.the.maze.runner.App;
 
 public class InputController {
 

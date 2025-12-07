@@ -40,7 +40,7 @@ javafx {
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.the.maze.runner.lnwza.App'
+    mainClass = 'org.the.maze.runner.App'
 }
 
 tasks.named('test') {

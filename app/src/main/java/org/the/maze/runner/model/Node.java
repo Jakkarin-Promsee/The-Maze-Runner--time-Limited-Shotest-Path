@@ -1,4 +1,4 @@
-package org.the.maze.runner.lnwza.model;
+package org.the.maze.runner.model;
 
 public class Node {
     public final int x;

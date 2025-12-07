@@ -1,8 +1,8 @@
-package org.the.maze.runner.lnwza.controller;
+package org.the.maze.runner.controller;
 
-import org.the.maze.runner.lnwza.App;
-import org.the.maze.runner.lnwza.algorithm.*;
-import org.the.maze.runner.lnwza.model.*;
+import org.the.maze.runner.App;
+import org.the.maze.runner.algorithm.*;
+import org.the.maze.runner.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 

@@ -1,6 +1,6 @@
-package org.the.maze.runner.lnwza.algorithm;
+package org.the.maze.runner.algorithm;
 
-import org.the.maze.runner.lnwza.model.*;
+import org.the.maze.runner.model.*;
 import java.util.*;
 
 public class BFSAlgorithm implements PathFindingAlgorithm {

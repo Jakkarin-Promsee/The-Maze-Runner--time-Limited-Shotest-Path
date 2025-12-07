@@ -1,4 +1,4 @@
-package org.the.maze.runner.lnwza;
+package org.the.maze.runner;
 
 import java.util.HashMap;
 import java.util.Map;

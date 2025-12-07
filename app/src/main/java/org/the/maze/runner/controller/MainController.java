@@ -1,6 +1,7 @@
-package org.the.maze.runner.lnwza.controller;
+package org.the.maze.runner.controller;
 
-import org.the.maze.runner.lnwza.App;
+import org.the.maze.runner.App;
+
 import javafx.event.ActionEvent;
 
 public class MainController {
