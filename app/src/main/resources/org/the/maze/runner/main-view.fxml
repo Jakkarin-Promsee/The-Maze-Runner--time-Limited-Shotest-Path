@@ -16,7 +16,6 @@
                style="
                    -fx-text-fill: #58a6ff; 
                    -fx-font-size: 56px; 
-                   -fx-font-weight: extra-bold;
                    -fx-letter-spacing: 5px; 
                    -fx-effect: dropshadow(gaussian, #58a6ff, 10, 0.25, 0, 0); 
                    -fx-padding: 0 0 10 0;
