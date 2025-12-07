@@ -30,16 +30,15 @@
 src/
 └── main/
     ├── java/
-    │   └── yourpackage/
-    │       ├── Main.java                <-- จุดเริ่มรัน JavaFX
+    │   └── org/the/maze/runner/
+    │       ├── App.java    #JavaFX main file
     │       │
-    │       ├── jfx/                     <-- UI, Controller, Drawing
-    │       │   ├── MainController.java
-    │       │   ├── GridRenderer.java
-    │       │   ├── AnimationRenderer.java
-    │       │   └── ColorTheme.java
+    │       ├── controller/
+    │       │   ├── GridController.java
+    │       │   ├── InputController.java
+    │       │   └── MainController.java
     │       │
-    │       ├── algorithm/   
+    │       ├── algorithm/
     │       │   ├── BFS.java
     │       │   ├── Dijkstra.java
     │       │   ├── AStar.java
@@ -52,7 +51,7 @@ src/
     │       │   ├── Node.java
     │       │   └── PathResult.java
     │       │
-    │       ├── io/ 
+    │       ├── io/
     │       │   ├── MapLoader.java
     │       │   └── SaveManager.java
     │       │
@@ -61,7 +60,9 @@ src/
     │           └── RandomUtil.java
     │
     └── resources/
-        ├── yourpackage/
-        │   └── main.fxml                 <-- UI layout
-        └── application.css               <-- theme/style
+        └── org/the/maze/runner/
+        ├── /maze_example
+        ├── grid-view.fxml
+        ├── input-view.fxml
+        └── main-view.fxml
 ```
