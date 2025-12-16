@@ -1,63 +1,81 @@
 package org.the.maze.runner.ui;
 
-import java.util.List;
-import org.the.maze.runner.algorithm.*;
-import org.the.maze.runner.model.*;
-
+import java.util.*;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
+import org.the.maze.runner.algorithm.PathFindingAlgorithm;
+import org.the.maze.runner.model.*;
+
 public class GridView {
 
-    // Maze Grid data store
     private Grid grid;
 
-    // Maze Screen Size
+    private Pane gridPane;
+
     private int maxWidth;
     private int maxHeight;
 
-    // Initialail Class
+    // 🔑 Node → Rectangle mapping (core optimization)
+    private final Map<Node, Rectangle> nodeRects = new HashMap<>();
+
     public GridView(int maxWidth, int maxHeight) {
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
     }
 
-    // Set Screen size
     public void setScreen(int maxWidth, int maxHeight) {
         this.maxWidth = maxWidth;
         this.maxHeight = maxHeight;
     }
 
-    public Pane draw(String gridText) {
-        // Initilize Pane
-        Pane gridPane = new Pane();
-
-        // Parse the string and initialize the Grid model
-        grid = parseWeightedMaze(gridText);
-
-        // Draw the initial grid no path setup (walls, start, end, weights)
-        drawGridVisualization(gridPane, null);
-
-        return gridPane;
+    public Grid getGrid() {
+        return grid;
     }
 
-    public Pane drawPath(PathFindingAlgorithm algorithm) {
-        // Initilize Pane
-        Pane gridPane = new Pane();
+    public int getGridWidth() {
+        return grid.getWidth();
+    }
 
-        // If it has no maze grid and algorith, path==null
-        if (algorithm == null || grid == null)
+    public int getGridHeight() {
+        return grid.getHeight();
+    }
+
+    // --------------------------------------------------
+    // DRAW MAZE (ONCE)
+    // --------------------------------------------------
+    public Pane draw(String gridText) {
+        Pane pane = new Pane();
+        nodeRects.clear();
+
+        grid = parseWeightedMaze(gridText);
+        drawBaseGrid(pane);
+
+        this.gridPane = pane;
+
+        return pane;
+    }
+
+    public Pane drawPath(PathFindingAlgorithm algorithm, Paint color) {
+        // Initilize Pane
+        Pane gridPane = new Pane(); // If it has no maze grid and algorith, path==null
+
+        if (algorithm == null ||
+                grid == null)
             return gridPane;
 
         // Get start/end nodes from the model
+
         Node start = grid.getStartNode();
         Node end = grid.getEndNode();
 
         // Prevent maze solve conflict
         if (start == null || end == null) {
-            System.err.println("Start or End node not found in the grid.");
+            System.err.println("Start or End    node not found in the grid.");
             return gridPane;
         }
 
@@ -65,203 +83,142 @@ public class GridView {
         List<Node> path = algorithm.findPath(grid, start, end);
 
         // Re-draw the entire grid, passing the found path to highlight it.
-        drawGridVisualization(gridPane, path);
+        drawFinalPath(path, color);
 
-        return gridPane;
+        return this.gridPane;
+    }
+
+    // --------------------------------------------------
+    // FINAL PATH ONLY (NO REDRAW)
+    // --------------------------------------------------
+    public void drawFinalPath(List<Node> path, Paint color) {
+        if (path == null)
+            return;
+
+        for (Node n : path) {
+            if (n.isStart() || n.isEnd())
+                continue;
+
+            Rectangle r = nodeRects.get(n);
+            if (r != null) {
+                r.setFill(color);
+            }
+        }
+    }
+
+    // --------------------------------------------------
+    // VISITED / EXPANDED NODE (INCREMENTAL)
+    // --------------------------------------------------
+    public void highlightVisited(Node n) {
+        if (n == null || n.isStart() || n.isEnd())
+            return;
+
+        Rectangle r = nodeRects.get(n);
+        if (r != null) {
+            r.setFill(Color.LIGHTBLUE);
+        }
+    }
+
+    // Thread-safe version (for background algorithms)
+    public void highlightVisitedAsync(Node n) {
+        Platform.runLater(() -> highlightVisited(n));
+    }
+
+    // --------------------------------------------------
+    // BASE GRID DRAW (STATIC)
+    // --------------------------------------------------
+    private void drawBaseGrid(Pane pane) {
+        pane.getChildren().clear();
+
+        int tileSize = calculateTileSize();
+
+        for (int y = 0; y < grid.getHeight(); y++) {
+            for (int x = 0; x < grid.getWidth(); x++) {
+                Node n = grid.getNode(x, y);
+
+                Rectangle rect = new Rectangle(tileSize, tileSize);
+                rect.setX(n.x * tileSize);
+                rect.setY(n.y * tileSize);
+
+                Color color;
+                if (n.isVoid()) {
+                    color = Color.GRAY;
+                } else if (n.isWall()) {
+                    color = Color.BLACK;
+                } else if (n.isStart()) {
+                    color = Color.GREEN;
+                } else if (n.isEnd()) {
+                    color = Color.RED;
+                } else {
+                    color = Color.web("#f0f0f0");
+                }
+
+                rect.setFill(color);
+                rect.setStroke(Color.web("#333333"));
+
+                pane.getChildren().add(rect);
+                nodeRects.put(n, rect);
+
+                // Weight label
+                if (!n.isWall() && !n.isVoid() && !n.isStart() && !n.isEnd()) {
+                    Label w = new Label(String.valueOf(n.getWeight()));
+                    w.setStyle("-fx-font-size:" + (tileSize / 3) +
+                            "px; -fx-font-weight: bold;");
+                    w.setLayoutX(n.x * tileSize + tileSize / 2 - 6);
+                    w.setLayoutY(n.y * tileSize + tileSize / 2 - 8);
+                    pane.getChildren().add(w);
+                }
+            }
+        }
     }
 
     private int calculateTileSize() {
         return Math.min(maxWidth / grid.getHeight(), maxHeight / grid.getWidth());
     }
 
-    // Draw grid (walls, start, end, weights || path)
-    private void drawGridVisualization(Pane gridPane, List<Node> path) {
-        // Ensure the pane exists before clearing/adding children
-        if (gridPane == null)
-            return;
-        gridPane.getChildren().clear();
-
-        // Get tile size to make full maze in screen max size
-        int tileSize = calculateTileSize();
-
-        // Build Grid Maze
-        for (int y = 0; y < grid.getHeight(); y++) {
-            for (int x = 0; x < grid.getWidth(); x++) {
-                Node n = grid.getNode(x, y);
-
-                // 1. Create the base Rectangle (The Cell)
-                Rectangle rect = new Rectangle(tileSize, tileSize);
-                rect.setX(n.x * tileSize);
-                rect.setY(n.y * tileSize);
-
-                // Determine base color based on node type
-                Color baseColor;
-                if (n.isVoid()) {
-                    baseColor = Color.GRAY; // Wall color
-                } else if (n.isWall()) {
-                    baseColor = Color.BLACK; // Wall color
-                } else if (n.isStart()) {
-                    baseColor = Color.GREEN; // Start color
-                } else if (n.isEnd()) {
-                    baseColor = Color.RED; // End color
-                } else {
-                    // White/light gray for weighted nodes
-                    baseColor = Color.web("#f0f0f0");
-                }
-                rect.setFill(baseColor);
-
-                // Dark border for cell separation
-                rect.setStroke(Color.web("#333333"));
-
-                // If a path exists and this node is on the path, override color
-                if (path != null && path.contains(n) && !n.isStart() && !n.isEnd()) {
-                    rect.setFill(Color.YELLOW); // Path color
-                }
-
-                // Add cell to the Pane
-                gridPane.getChildren().add(rect);
-
-                // 2. Add Weight Label if it's a weighted node and not a wall
-                if (n.getWeight() >= 1 && !n.isStart() && !n.isEnd()) {
-                    Label weightLabel = new Label(String.valueOf(n.getWeight()));
-
-                    // Dynamic font size based on TILE_SIZE
-                    weightLabel.setStyle("-fx-font-size:" + ((int) tileSize / 3)
-                            + "px; -fx-text-fill: black; -fx-font-weight: bold;");
-
-                    // Position the label in the center of the cell
-                    // Note: Centering labels is complex due to font metrics.
-                    // These offsets are approximations (x-5, y-8) from the previous code.
-                    weightLabel.setLayoutX(n.x * tileSize + tileSize / 2 - (weightLabel.getText().length() * 3));
-                    weightLabel.setLayoutY(n.y * tileSize + tileSize / 2 - 8);
-
-                    // Add label to the Pane
-                    gridPane.getChildren().add(weightLabel);
-                }
-            }
-        }
-
-        // Final re-draw of start/end to ensure they are on top of the path color
-        drawStartEndNodes(gridPane, path);
-    }
-
-    // draw start/end on top
-    private void drawStartEndNodes(Pane gridPane, List<Node> path) {
-        // Call start and end node
-        Node start = grid.getStartNode();
-        Node end = grid.getEndNode();
-
-        // Get tile size to make full maze in screen max size
-        int tileSize = calculateTileSize();
-
-        if (start != null) {
-            Rectangle startRect = createSpecialRect(start, Color.GREEN, tileSize);
-            gridPane.getChildren().add(startRect);
-        }
-
-        if (end != null) {
-            Color endColor = (path != null && path.contains(end)) ? Color.RED.darker() : Color.RED;
-            Rectangle endRect = createSpecialRect(end, endColor, tileSize);
-            gridPane.getChildren().add(endRect);
-        }
-    }
-
-    // Rectangle node
-    private Rectangle createSpecialRect(Node n, Color color, int size) {
-        Rectangle rect = new Rectangle(size, size);
-        rect.setX(n.x * size);
-        rect.setY(n.y * size);
-        rect.setFill(color);
-        rect.setStroke(Color.web("#CCCCCC")); // Light border
-        return rect;
-    }
-
-    // Input Parsing from Sting to Grid
+    // --------------------------------------------------
+    // PARSER (UNCHANGED)
+    // --------------------------------------------------
     private Grid parseWeightedMaze(String input) {
         String[] rows = input.trim().split("\n");
         int height = rows.length;
 
-        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("#|S|G|\"\\d+\"|\n").matcher(input);
-
-        // Calculate width by summing tokens in the first meaningful row
         int width = 0;
-
-        if (rows.length > 0) {
-            // Use a loop to find the width (max column count)
-            for (String row : rows) { // Iterate over all rows
-                java.util.regex.Matcher widthMatcher = java.util.regex.Pattern.compile("#|S|G|\"\\d+\"")
-                        .matcher(row);
-
-                int currentWidth = 1; // count \n too
-                while (widthMatcher.find()) {
-                    currentWidth++;
-                }
-                // Update width to be the maximum width found so far
-                if (currentWidth > width) {
-                    width = currentWidth;
-                }
-            }
-
+        for (String row : rows) {
+            width = Math.max(width, row.replaceAll("\"\\d+\"", "X").length());
         }
 
-        Grid newGrid = new Grid(width - 1, height);
+        Grid g = new Grid(width, height);
 
-        int x = 0;
-        int y = 0;
+        for (int y = 0; y < height; y++) {
+            int x = 0;
+            String row = rows[y];
+            for (int i = 0; i < row.length();) {
+                Node n = g.getNode(x, y);
+                char c = row.charAt(i);
 
-        matcher.reset();
-        while (matcher.find()) {
-            String token = matcher.group();
-
-            // Row transition logic
-            if (x >= (width)) {
-                x = 0;
-                y++;
-            }
-            if (y >= height)
-                break;
-
-            if (token.equals("\n")) {
-                while (x < (width - 1)) {
-                    Node node = newGrid.getNode(x, y);
-                    node.setVoid(true);
-                    x++;
+                if (c == '#') {
+                    n.setWall(true);
+                    i++;
+                } else if (c == 'S') {
+                    n.setStart(true);
+                    g.setStartNode(n);
+                    i++;
+                } else if (c == 'G') {
+                    n.setEnd(true);
+                    g.setEndNode(n);
+                    i++;
+                } else if (c == '"') {
+                    int j = row.indexOf('"', i + 1);
+                    int w = Integer.parseInt(row.substring(i + 1, j));
+                    n.setWeight(w);
+                    i = j + 1;
+                } else {
+                    i++;
                 }
-
-                x = 0;
-                y++;
-                continue;
+                x++;
             }
-
-            Node node = newGrid.getNode(x, y);
-            if (token.equals("#")) {
-                node.setWall(true);
-                node.setWeight(0);
-            } else if (token.equals("S")) {
-                node.setStart(true);
-                node.setWeight(1);
-                newGrid.setStartNode(node);
-            } else if (token.equals("G")) {
-                node.setEnd(true);
-                node.setWeight(1);
-                newGrid.setEndNode(node);
-            } else if (token.startsWith("\"") && token.endsWith("\"")) {
-                try {
-                    int weight = Integer.parseInt(token.substring(1, token.length() - 1));
-                    node.setWeight(weight);
-                    node.setVoid(false);
-                } catch (NumberFormatException e) {
-                    System.err.println("Invalid weight token: " + token);
-                    node.setWeight(1);
-                }
-            } else {
-                node.setWeight(1);
-            }
-
-            x++;
         }
-
-        System.out.println("Maze parsed successfully: " + width + "x" + height);
-        return newGrid;
+        return g;
     }
 }

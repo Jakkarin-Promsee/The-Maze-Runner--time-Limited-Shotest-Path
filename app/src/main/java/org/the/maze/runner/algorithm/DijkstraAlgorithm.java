@@ -6,11 +6,14 @@ import org.the.maze.runner.model.Node;
 import java.util.*;
 
 public class DijkstraAlgorithm implements PathFindingAlgorithm {
+    public List<Node> path = Collections.emptyList();
+    private int visitedCount = 0;
 
     @Override
     public List<Node> findPath(Grid grid, Node start, Node end) {
         // 1. PriorityQueue for nodes to visit
-        // Using PriorityQueue instead of standard Queue to always process the lowest cost node first.
+        // Using PriorityQueue instead of standard Queue to always process the lowest
+        // cost node first.
         PriorityQueue<NodeWrapper> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(nw -> nw.totalCost));
         priorityQueue.add(new NodeWrapper(start, 0));
 
@@ -23,7 +26,8 @@ public class DijkstraAlgorithm implements PathFindingAlgorithm {
         // This is necessary to reconstruct the final path from end to start.
         Map<Node, Node> parentMap = new HashMap<>();
 
-        // 4. Set to track visited nodes to avoid processing the same node multiple times
+        // 4. Set to track visited nodes to avoid processing the same node multiple
+        // times
         Set<Node> visited = new HashSet<>();
 
         // --- Core Dijkstra Loop ---
@@ -34,7 +38,8 @@ public class DijkstraAlgorithm implements PathFindingAlgorithm {
 
             // Check if we reached the goal
             if (current.equals(end)) {
-                return AlgorithmUtils.reconstructPath(parentMap, start, end);
+                path = AlgorithmUtils.reconstructPath(parentMap, start, end);
+                return path;
             }
 
             // If we have already visited this node, skip it
@@ -42,11 +47,12 @@ public class DijkstraAlgorithm implements PathFindingAlgorithm {
                 continue;
             }
             visited.add(current);
+            visitedCount++;
 
             // Iterate over valid neighbors (non-wall, non-void)
             // Note: The Grid.getNeighbors() already handles wall check.
             for (Node neighbor : grid.getNeighbors(current)) {
-                
+
                 // Ensure the node isn't marked as void
                 if (!neighbor.isVoid()) {
                     // Calculate new cost:
@@ -80,5 +86,19 @@ public class DijkstraAlgorithm implements PathFindingAlgorithm {
             this.node = node;
             this.totalCost = totalCost;
         }
+    }
+
+    // ---------------- EVALUATION ----------------
+
+    public int getPathLength() {
+        return AlgorithmUtils.pathLength(path);
+    }
+
+    public int getPathCost() {
+        return AlgorithmUtils.pathCost(path);
+    }
+
+    public int getVisitedCount() {
+        return visitedCount;
     }
 }

@@ -7,49 +7,63 @@ import java.util.*;
 
 public class BFSAlgorithm implements PathFindingAlgorithm {
 
+    public List<Node> path = Collections.emptyList();
+    private int visitedCount = 0;
+
     @Override
     public List<Node> findPath(Grid grid, Node start, Node end) {
+
+        // Reset evaluation state
+        path = Collections.emptyList();
+        visitedCount = 0;
+
         // 1. Queue for nodes to visit
         Queue<Node> queue = new LinkedList<>();
         queue.add(start);
 
-        // 2. Map to track the parent/predecessor of each node
-        // This is necessary to reconstruct the final path from end to start.
+        // 2. Map to track the parent/predecessor
         Map<Node, Node> parentMap = new HashMap<>();
 
-        // 3. Set to track visited nodes to avoid cycles and redundant processing
+        // 3. Set to track visited nodes
         Set<Node> visited = new HashSet<>();
         visited.add(start);
 
         // --- Core BFS Loop ---
         while (!queue.isEmpty()) {
             Node current = queue.poll();
+            visitedCount++; // 👈 evaluation metric
 
-            // Check if we reached the goal
+            // Goal reached
             if (current.equals(end)) {
-                return AlgorithmUtils.reconstructPath(parentMap, start, end);
+                path = AlgorithmUtils.reconstructPath(parentMap, start, end);
+                return path;
             }
 
-            // Iterate over valid neighbors (non-wall, non-void)
-            // Note: The Grid.getNeighbors() already handles wall check.
+            // Explore neighbors
             for (Node neighbor : grid.getNeighbors(current)) {
-
-                // We also need to ensure the node isn't marked as void,
-                // though usually non-wall nodes are paths/weighted.
                 if (!visited.contains(neighbor) && !neighbor.isVoid()) {
-                    // Mark as visited
                     visited.add(neighbor);
-
-                    // Record the parent/predecessor
                     parentMap.put(neighbor, current);
-
-                    // Add to the queue for next iteration
                     queue.add(neighbor);
                 }
             }
         }
 
-        // If the queue is empty and the 'end' node was not reached
-        return Collections.emptyList();
+        // No path found
+        return path;
+    }
+
+    // ---------------- EVALUATION ----------------
+
+    public int getPathLength() {
+        return AlgorithmUtils.pathLength(path);
+    }
+
+    public int getPathCost() {
+        return AlgorithmUtils.pathCost(path);
+    }
+
+    public int getVisitedCount() {
+        return visitedCount;
     }
 }

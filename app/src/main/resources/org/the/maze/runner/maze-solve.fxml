@@ -13,12 +13,19 @@
     <BorderPane VBox.vgrow="ALWAYS">
         <top>
             <HBox spacing="15" alignment="CENTER" style="-fx-padding: 20 0 20 0; -fx-background-color: #282828; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 5);">
+                <Button text="GA" onAction="#runGa"
+                        style="-fx-background-color: #4c00b0; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;"/>
+
                 <Button text="BFS" onAction="#runBFS"
                         style="-fx-background-color: #3366ff; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;"/>
                 <Button text="Dijkstra" onAction="#runDijkstra"
                         style="-fx-background-color: #ffaa00; -fx-text-fill: #121212; -fx-font-weight: bold; -fx-background-radius: 8; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;"/>
                 <Button text="A*" onAction="#runAStar"
                         style="-fx-background-color: linear-gradient(#00b06a, #009e5f); -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;"/>
+                <Separator orientation="VERTICAL" prefHeight="25" />
+                <Button text="Clear" onAction="#clearPath"
+                        style="-fx-background-color: #999; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;"/>
+
                 <Separator orientation="VERTICAL" prefHeight="25" />
                 <Button text="New Maze" onAction="#goInitialize"
                         style="-fx-background-color: #444; -fx-text-fill: #EEE; -fx-background-radius: 8; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;"/>
@@ -28,19 +35,56 @@
         </top>
 
         <center>
-            <HBox alignment="CENTER" VBox.vgrow="ALWAYS" style="-fx-padding: 20;">
-                <Pane fx:id="gridPane" 
-                    prefWidth="478" prefHeight="478"
-                      style="-fx-background-color: #1e1e1e;
-                             -fx-border-color: #333333;
-                             -fx-border-width: 2;
-                             -fx-border-radius: 10;
-                             -fx-background-radius: 10;
-                             -fx-effect: innershadow(gaussian, #000000, 10, 0.5, 0, 0);
-                             
-                             -fx-padding: 10;"
-                      /> 
-            </HBox>
-        </center>
+    <HBox spacing="20" alignment="CENTER" VBox.vgrow="ALWAYS"
+          style="-fx-padding: 20;">
+
+        <!-- Maze -->
+        <Pane fx:id="gridPane"
+              prefWidth="478" prefHeight="478"
+              style="-fx-background-color: #1e1e1e;
+                     -fx-border-color: #333333;
+                     -fx-border-width: 2;
+                     -fx-border-radius: 10;
+                     -fx-background-radius: 10;
+                     -fx-padding: 10;"/>
+
+        <!-- Evaluation Panel -->
+        <VBox prefWidth="250" spacing="15"
+              style="-fx-background-color: #1a1a1a;
+                     -fx-padding: 20;
+                     -fx-background-radius: 10;
+                     -fx-border-color: #333;
+                     -fx-border-radius: 10;">
+
+            <Label text="Evaluation"
+                   style="-fx-text-fill: white;
+                          -fx-font-size: 18px;
+                          -fx-font-weight: bold;"/>
+
+            <Separator/>
+
+            <Label fx:id="statusLabel" text="Status: ready"
+                   style="-fx-text-fill: #cccccc;"/>
+
+            <Label fx:id="timeLabel" text="Time: - ms"
+                   style="-fx-text-fill: #cccccc;"/>
+
+            <Label fx:id="costLabel" text="Cost: -"
+                   style="-fx-text-fill: #cccccc;"/>
+
+            <Label fx:id="bestCostLabel" text="Best Cost: -"
+                   style="-fx-text-fill: #cccccc;"/>
+
+            <Label fx:id="pathLengthLabel" text="Path Length: -"
+                   style="-fx-text-fill: #cccccc;"/>
+
+            <Label fx:id="nodeVisitedLabel" text="Visited Nodes: -"
+                   style="-fx-text-fill: #cccccc;"/>
+
+        </VBox>
+
+    </HBox>
+</center>
+
     </BorderPane>
 </VBox>

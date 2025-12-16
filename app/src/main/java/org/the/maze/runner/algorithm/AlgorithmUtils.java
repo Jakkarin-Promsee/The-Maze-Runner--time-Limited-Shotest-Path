@@ -34,4 +34,38 @@ public class AlgorithmUtils {
         // this is mostly for completeness.
         return path;
     }
+
+    // ---------------- PATH LENGTH ----------------
+    public static int pathLength(List<Node> path) {
+        if (path == null || path.size() < 2)
+            return 0;
+        return path.size() - 1;
+    }
+
+    // ---------------- PATH COST ----------------
+    public static int pathCost(List<Node> path) {
+        if (path == null || path.size() < 2)
+            return 0;
+
+        int cost = 0;
+        for (int i = 1; i < path.size(); i++) {
+            cost += path.get(i).getWeight();
+        }
+        return cost;
+    }
+
+    private static int moveCost(Node a, Node b) {
+        int dx = Math.abs(a.x - b.x);
+        int dy = Math.abs(a.y - b.y);
+
+        // 4-direction grid
+        if (dx + dy == 1)
+            return 1;
+
+        // diagonal (if allowed)
+        if (dx == 1 && dy == 1)
+            return 2;
+
+        return 1;
+    }
 }
