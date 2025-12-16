@@ -87,7 +87,7 @@ public class GridController {
         int cells = gridView.getGridWidth() * gridView.getGridHeight();
 
         GaConfig config = new GaConfig(
-                00,
+                300,
                 0.3,
                 1000,
                 cells,
